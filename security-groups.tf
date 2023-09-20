@@ -1,8 +1,7 @@
 resource "aws_security_group" "public" {
-  name        = "Allow public HTTP/HTTPS ALB"
+  name        = "Allow public 50010/50011 ALB"
   description = "Public internet access"
   vpc_id      = module.vpc.vpc_id
-
 }
 
 resource "aws_security_group_rule" "public_out" {
@@ -15,19 +14,19 @@ resource "aws_security_group_rule" "public_out" {
   security_group_id = aws_security_group.public.id
 }
 
-resource "aws_security_group_rule" "public_in_http" {
+resource "aws_security_group_rule" "public_in_50011" {
   type              = "ingress"
-  from_port         = 80
-  to_port           = 80
+  from_port         = 50011
+  to_port           = 50011
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.public.id
 }
 
-resource "aws_security_group_rule" "public_in_https" {
+resource "aws_security_group_rule" "public_in_50010" {
   type              = "ingress"
-  from_port         = 443
-  to_port           = 443
+  from_port         = 50010
+  to_port           = 50010
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.public.id

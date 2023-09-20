@@ -1,0 +1,23 @@
+    {
+      "essential": true,
+      "memory": 512,
+      "name": "weather-webservice",
+      "cpu": 2,
+      "image": "${rep_url}:weather",
+      "environment": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "weather-webservice",
+          "awslogs-create-group": "true",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings":[
+        {
+          "containerPort":50011,
+          "hostPort": 50011
+        }
+      ]      
+    }

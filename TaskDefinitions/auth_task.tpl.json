@@ -1,0 +1,23 @@
+    {
+      "essential": true,
+      "memory": 512,
+      "name": "auth-webservice",
+      "cpu": 2,
+      "image": "${rep_url}:auth",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "auth-webservice",
+          "awslogs-create-group": "true",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "environment": [],
+      "portMappings":[
+        {
+          "containerPort":50010,
+          "hostPort": 50010
+        }
+      ]
+    }    

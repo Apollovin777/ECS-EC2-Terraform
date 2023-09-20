@@ -7,19 +7,19 @@ resource "aws_ecs_cluster" "cluster" {
 resource "aws_ecs_task_definition" "task_definition" {
   container_definitions    = data.template_file.task_definition_json.rendered # task defination json file location
   family                   = "folderit-task-defination-webservice"            # task name
-  network_mode             = "bridge"                                         # network mode awsvpc, brigde
-  memory                   = "256"
-  cpu                      = "256"
+  network_mode             = "host"                                         # network mode awsvpc, brigde
+  memory                   = "512"
+  cpu                      = "512"
   requires_compatibilities = ["EC2"] # Fargate or EC2
 }
 
 data "template_file" "task_definition_json" {
-  template = file("task_definition.json")
-
+  template = format("[%s,%s]",file("TaskDefinitions/auth_task.tpl.json"),
+                            file("TaskDefinitions/weather_task.tpl.json"))
   vars = {
-    CONTAINER_IMAGE = var.container_image
+    rep_url = var.repository_url
   }
-}
+} 
 
 ##### AWS ECS-SERVICE #####
 resource "aws_ecs_service" "service-webservice" {
@@ -29,8 +29,8 @@ resource "aws_ecs_service" "service-webservice" {
   name            = "folderit-webservice-service-webservice"    # Name of service
   task_definition = aws_ecs_task_definition.task_definition.arn # Attach the task to service
   load_balancer {
-    container_name   = "folderit-webservice"
-    container_port   = "80"
-    target_group_arn = aws_alb_target_group.alb_public_webservice_target_group.arn
+    container_name   = "weather-webservice"
+    container_port   = "50011"
+    target_group_arn = aws_alb_target_group.alb_public_50011_target_group.arn
   }
 }
